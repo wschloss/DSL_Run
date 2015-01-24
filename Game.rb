@@ -9,9 +9,9 @@ class Game
   # Gravity for vertical acceleration
   @@GRAVITY = 5
   # Y value that represents the 'floor' of the map
-  @@FLOOR = 850
+  @@FLOOR = 700
   # Determines how high player can jump
-  @@JUMP_AMOUNT = 60
+  @@JUMP_AMOUNT = 70
   # Determines how fast player gets up to running speed
   @@X_ACCELERATION = 1
 
@@ -21,7 +21,7 @@ class Game
   	# Contains all objects to draw
   	@drawables = []
   	# Main player
-  	@player = Player.new(@cam.x,@@FLOOR)
+  	@player = Player.new(0,@@FLOOR - 76) # This 76 is the players height.  Should be passed in somehow
   	# Player should be drawn
   	@drawables << @player
   end

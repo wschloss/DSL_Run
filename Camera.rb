@@ -10,12 +10,12 @@ class Camera
   def initialize(x=0.0, y=0.0)
 	  @x = x
 	  @y = y
-	  # Offset is how far the cam center is in front of the player sprite
-	  @offset = 250
+	  # Offset is how far the cam left edge is from the main player
+	  @offset = 200
   end
 
-  # Moves camera's horizontal position to the desired object position plus an offset
+  # Moves camera's horizontal position to the desired object position minus an offset
   def follow object
-  	@x = object.x + @offset
+  	@x = object.x - @offset
   end
 end

@@ -8,34 +8,22 @@ class AssetManager
   # Image files for all game objects loaded in this object
   def initialize
   	# Image count to be used to fill a loading bar if needed
-	@imgCount = 13
-	# Counter used for player animation frames
-	@animCount = 0
-	@playerImages = ["./resources/player1.png", 
-						"./resources/player2.png",
-						"./resources/player3.png",
-						"./resources/player4.png",
-						"./resources/player5.png",
-						"./resources/player6.png",
-						"./resources/player7.png",
-						"./resources/player8.png",
-						"./resources/player9.png",
-						"./resources/player10.png",
-						"./resources/player11.png",
-						"./resources/player12.png"]
-	@backgroundImage = "./resources/background.png"
-	@imageHash = {}
+	  @imgCount = 14
+	  # Counter used for player animation frames
+	  @animCount = 0
+	  @playerImages = "./resources/playerSheet.png"
+	  @backgroundImage = "./resources/background.png"
+    @tileImage = "./resources/tile.png"
+	  @imageHash = {}
   end
 
   # Loads images
   def load window
   	# Construct array of player images
-  	playerAnim = []
-  	@playerImages.each do |path|
-  	  playerAnim << Gosu::Image.new(window, path, false)
-  	end  
-	@imageHash[:player] = playerAnim
-	@imageHash[:background] = Gosu::Image.new(window, @backgroundImage, true)
+  	playerAnim = *Gosu::Image.load_tiles(window, "./resources/playerSheet.png", 55, 76, false) 
+	  @imageHash[:player] = playerAnim
+	  @imageHash[:background] = Gosu::Image.new(window, @backgroundImage, true)
+    @imageHash[:tile] = Gosu::Image.new(window, @tileImage, true)
   end
 
   def lookup item

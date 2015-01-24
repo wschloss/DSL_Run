@@ -3,10 +3,10 @@ Walter Schlosser
 =end
 
 class Player
-  attr_accessor :x, :y, :vx, :vy, :state
+  attr_accessor :x, :y, :vx, :vy, :state, :height, :width
 
   # Maximum allowed velocity components
-  @@MAX_VX = 10
+  @@MAX_VX = 15
   @@MAX_VY = 20
 
   def initialize(x=0,y=0)
@@ -14,6 +14,9 @@ class Player
     @y = y
     @vx = 0
     @vy = 0
+    # Dimensions of each frame
+    @width = 55
+    @height = 76
     # Player states will include running and jumping
     @state = :running
   end
@@ -21,8 +24,8 @@ class Player
   # Update the player position, floor is the lowest allowable y
   def move floor
     @x += @vx
-   	if @y > floor
-      @y = floor
+    if @y + @vy > floor - @height
+      @y = floor - @height
       @vy = 0
       @state = :running
     else
@@ -34,6 +37,6 @@ class Player
   # Also imposes maximum velocities
   def accelerate(ax, ay)
   	@vx += ax unless @vx > @@MAX_VX
-  	@vy += ay unless @vx > @@MAX_VY
+  	@vy += ay unless @vy > @@MAX_VY
   end
 end
