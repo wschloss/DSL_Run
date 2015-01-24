@@ -27,9 +27,9 @@ class AssetManager
   end
 
   def lookup item
-  	@animCount += 1
   	if item == :player
-  	  @imageHash[:player].at(@animCount/6 % 12)
+      @animCount += 1
+  	  @imageHash[:player].at(@animCount/5 % 12)
   	else
   	  @imageHash[item]
   	end

@@ -9,14 +9,15 @@ class Player
   @@MAX_VX = 15
   @@MAX_VY = 20
 
+  # Dimensions of each frame
+  WIDTH = 55
+  HEIGHT = 76
+
   def initialize(x=0,y=0)
     @x = x
     @y = y
     @vx = 0
     @vy = 0
-    # Dimensions of each frame
-    @width = 55
-    @height = 76
     # Player states will include running and jumping
     @state = :running
   end
@@ -24,8 +25,8 @@ class Player
   # Update the player position, floor is the lowest allowable y
   def move floor
     @x += @vx
-    if @y + @vy > floor - @height
-      @y = floor - @height
+    if @y + @vy > floor - HEIGHT
+      @y = floor - HEIGHT
       @vy = 0
       @state = :running
     else

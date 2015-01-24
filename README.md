@@ -9,8 +9,7 @@
 <p>'Parse and Run' is a simple run/jump game project I'm working on where the levels are all generated from text.  In this way, it is easy to make a new level without having to ever mess around with source code.</p>
 <p>Some goals I currently have in mind: </p>
 <ul>
-	<li>Get the gameplay running first...</li>
-	<li>Learn to split a sprite sheet</li>
+	<li>Implement/Improve gameplay</li>
 	<li>Write the level generator to understand a small set of instructions</li>
 	<li>Expand the amount of game objects and instructions the generator understands</li>
 	<li>Allow the generator to read any text and convert it into a level, such as entering your favorite website, and using its content to see what kind of level comes out</li>
