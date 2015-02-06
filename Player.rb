@@ -18,7 +18,7 @@ class Player
     @y = y
     @vx = 0
     @vy = 0
-    # Player states will include running and jumping
+    # Player states will include running and jumping, and lose
     @state = :running
   end
 

@@ -11,7 +11,7 @@ class Game
   # Gravity for vertical acceleration
   @@GRAVITY = 5
   # Y value that represents the 'floor' of the map to avoid losing
-  @@TESTFLOOR = 700
+  @@LOSEFLOOR = 800
   # Determines how high player can jump
   @@JUMP_AMOUNT = 70
   # Determines how fast player gets up to running speed
@@ -23,13 +23,13 @@ class Game
   	# Contains all objects to draw
   	@drawables = []
   	# Main player
-  	@player = Player.new(0,@@TESTFLOOR - Player::HEIGHT)
+  	@player = Player.new(0,0) # position will be set based on first block
   	# Player should be drawn
   	@drawables << @player
+    # Start block and set floor, players y appropriately
     @drawables += generateTestBlocks
     # Floor is the lowest the player can go.  It corresponds to the top of the block
     # under the players position, and is updated in collisions
-    @floor = @@TESTFLOOR
   end
 
   # Responds to key presses appropriately
@@ -49,13 +49,16 @@ class Game
   	  	@player.accelerate(@@X_ACCELERATION, 0)
   	  when :jumping
   	  	@player.accelerate(0, @@GRAVITY)
+        @player.state = :lose if @player.y >= @@LOSEFLOOR - Player::HEIGHT
   	end
-    # Check collision with walls, update floor
-    collisionCheck
-  	# Move player
-  	@player.move @floor
-  	# Move camera to player
-  	@cam.follow @player
+    unless @player.state == :lose
+      # Check collision with walls, update floor
+      collisionCheck
+  	  # Move player
+  	  @player.move @floor
+  	  # Move camera to player
+  	  @cam.follow @player
+    end
   end
 
   # Finds collisions between player and block.
@@ -74,13 +77,13 @@ class Game
     # Process if player is within x bounds
     if block.nil?
       # No block in bounds, set losing floor, player state to fall
-      @floor = @@TESTFLOOR
+      @floor = @@LOSEFLOOR
       @player.state = :jumping
     else
       # Check if player is above the block to set a new floor
       if block.y > @player.y + Player::HEIGHT
-        @floor = block.y - (block.height-1) * Tile::HEIGHT - Player::HEIGHT
-        @floor = @@TESTFLOOR if @floor > @@TESTFLOOR
+        @floor = block.y - (block.height-1) * Tile::HEIGHT - 0.55 * Player::HEIGHT # .55 is a consequence of the player sprite containing empty space beneath it
+        #@floor = @@LOSEFLOOR if @floor > @@TESTFLOOR
       else # collision on players right
         @player.vx = 0
       end
@@ -90,10 +93,14 @@ class Game
   # A testing function that generates a variety of blocks
   def generateTestBlocks
     blocks = []
-    blocks << Block.new(1000, @@TESTFLOOR, 10, 2)
+    blocks << Block.new(0, @@LOSEFLOOR - 100, 20, 2)
+    # Set player to stand on start block
+    @player.y = @@LOSEFLOOR - 100 - Tile::HEIGHT - 0.55 * Player::HEIGHT
+    # Set floor
+    @floor = @player.y
     100.times do
-      x = blocks[-1].x + blocks[-1].width * Tile::WIDTH + rand(2000)
-      blocks << Block.new(x, @@TESTFLOOR, rand(100), 1 + rand(7))
+      x = blocks[-1].x + blocks[-1].width * Tile::WIDTH + rand(800)
+      blocks << Block.new(x, @@LOSEFLOOR - 100, rand(100), 1 + rand(7))
     end
     blocks
   end
