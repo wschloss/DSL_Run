@@ -9,8 +9,8 @@
 <p>'Parse and Run' is a simple run/jump game project I'm working on where the levels are all generated from text (which is really a Ruby DSL).  In this way, it is easy to make a new level without having to ever mess around with source code.</p>
 <p>Some goals I currently have in mind: </p>
 <ul>
-	<li>Implement the DSL!</li>
-	<li>Expand the amount of game objects and instructions the DSL contains</li>
-	<li>Fix the horizontal collision detection</li>
+	<li>Add to the DSL!</li>
+	<li>Expand the amount of game objects</li>
+	<li>Fix the horizontal collision detection - sometimes corners are buggy</li>
 </ul>
 <hr>

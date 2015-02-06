@@ -8,9 +8,15 @@ require './Game.rb'
 require './Camera.rb'
 require './AssetManager.rb'
 require './Tile.rb'
+# Singleton pattern module for the game window
+require 'singleton'
 
 # Main window
 class GameWindow < Gosu::Window
+  include Singleton
+
+  attr_reader :game
+
   WINDOW_WIDTH = 900
   WINDOW_HEIGHT = 700
 
@@ -66,5 +72,32 @@ class GameWindow < Gosu::Window
   end
 end
 
-window = GameWindow.new
-window.show
+
+# --- DSL Allowed Commands ---
+
+# Creates a block at position x with width and height.
+# Units are in number of tiles
+def block(x, width, height)
+  GameWindow.instance.game.addBlock(x, width, height)
+end
+
+# --- End of DSL ---
+
+
+# Attempt to load the level file and play
+# File can be passed as a command line arg
+filename = ARGV[0] || 'level.txt'
+ARGV.clear
+if File.exist? filename
+  begin
+    load 'level.txt'
+    # Show the window instance
+    GameWindow.instance.show
+  rescue NameError => e
+    badCommand = e.message.scan(/`.*?'/).at(0)
+    puts "Level File Error: The command #{badCommand} is not valid"
+  end
+else
+  #File not found
+  puts "The file '#{filename}' was not found"
+end

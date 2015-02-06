@@ -27,7 +27,8 @@ class Game
   	# Player should be drawn
   	@drawables << @player
     # Start block and set floor, players y appropriately
-    @drawables += generateTestBlocks
+    #@drawables += generateTestBlocks(generateStartBlock)
+    @drawables << generateStartBlock
     # Floor is the lowest the player can go.  It corresponds to the top of the block
     # under the players position, and is updated in collisions
   end
@@ -91,17 +92,29 @@ class Game
   end
 
   # A testing function that generates a variety of blocks
-  def generateTestBlocks
-    blocks = []
-    blocks << Block.new(0, @@LOSEFLOOR - 100, 20, 2)
-    # Set player to stand on start block
-    @player.y = @@LOSEFLOOR - 100 - Tile::HEIGHT - 0.55 * Player::HEIGHT
-    # Set floor
-    @floor = @player.y
+  # with position to the right of the starting block
+  def generateTestBlocks(startingblock)
+    blocks = [startingblock]
     100.times do
       x = blocks[-1].x + blocks[-1].width * Tile::WIDTH + rand(800)
       blocks << Block.new(x, @@LOSEFLOOR - 100, rand(100), 1 + rand(7))
     end
     blocks
+  end
+
+  # Generates a start block and places the player/floor appropriately
+  def generateStartBlock
+    # Set player to stand on start block
+    @player.y = @@LOSEFLOOR - 100 - Tile::HEIGHT - 0.55 * Player::HEIGHT
+    # Set floor
+    @floor = @player.y
+    # Make the start block
+    Block.new(0, @@LOSEFLOOR - 100, 20, 2)
+  end
+
+  # Adds a block to the level with position x, width and height
+  # all given in units of number of tiles
+  def addBlock(x, width, height)
+    @drawables << Block.new(x * Tile::WIDTH, @@LOSEFLOOR - 100, width, height)
   end
 end
