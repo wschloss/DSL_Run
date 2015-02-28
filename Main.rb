@@ -1,13 +1,18 @@
 =begin
-Author: Walter Schlosser
+Walter Schlosser
+
+This file defines the main game window.  The game window
+initializes the camera and game objects, and is responsible
+for drawing every frame.  This script also loads the DSL
+file, and exits if there is an error.
 =end
 
 # Gosu gem
 require 'gosu'
 require './Game.rb'
-require './Camera.rb'
-require './AssetManager.rb'
-require './Tile.rb'
+require './framework/Camera.rb'
+require './framework/AssetManager.rb'
+require './gameObjects/Tile.rb'
 # Singleton pattern module for the game window
 require 'singleton'
 
@@ -22,19 +27,22 @@ class GameWindow < Gosu::Window
 
   def initialize
     super(WINDOW_WIDTH, WINDOW_HEIGHT, false)
-    self.caption = "Parse and Run!"
+    self.caption = "DSL Run!"
+    # Init camera and game
     @cam = Camera.new(0,0)
     @game = Game.new @cam
-    # Loads assets for drawing/sound
+    # Load assets for drawing/sound
     @assets = AssetManager.new
     @assets.load self
   end
 
+  # Called every frame to update logic
   def update
   	# Move game logic forward
   	@game.update
   end
 
+  # Called when needed, draws all game objects
   def draw
   	# Draw all the game objects with the camera translation
 	  translate -@cam.x, -@cam.y do
@@ -65,6 +73,7 @@ class GameWindow < Gosu::Window
 	  end
   end
 
+  # Triggers on keyboard down events
   def button_down id
   	# Let game handle input logic
   	close if id == Gosu::KbEscape
@@ -73,24 +82,21 @@ class GameWindow < Gosu::Window
 end
 
 
-# --- DSL Allowed Commands ---
+# --- DSL Inclusion ---
 
-# Creates a block at position x with width and height.
-# Units are in number of tiles
-def block(x, width, height)
-  GameWindow.instance.game.addBlock(x, width, height)
-end
+# Required after the window definition so it may reference the class
+require "./framework/DSLdef.rb"
 
-# --- End of DSL ---
+# ---               ---
 
 
 # Attempt to load the level file and play
 # File can be passed as a command line arg
-filename = ARGV[0] || 'level.txt'
+filename = ARGV[0] || './resources/level.txt'
 ARGV.clear
 if File.exist? filename
   begin
-    load 'level.txt'
+    load filename
     # Show the window instance
     GameWindow.instance.show
   rescue NameError => e

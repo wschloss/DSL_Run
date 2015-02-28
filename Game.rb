@@ -1,10 +1,12 @@
 =begin
 Walter Schlosser
+
+The Game instance manages the objects in the game.  It responds to
+keyboard input, and updates the game logic while managing collisions.
 =end
 
-require './Player.rb'
-require './Block.rb'
-require './Tile.rb'
+require './gameObjects/Player.rb'
+require './gameObjects/Block.rb'
 
 class Game
   attr_reader :drawables

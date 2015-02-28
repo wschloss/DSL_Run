@@ -1,5 +1,7 @@
 =begin
 Walter Schlosser
+
+A tile is one section of a block object.
 =end
 
 class Tile

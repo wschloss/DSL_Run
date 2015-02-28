@@ -1,3 +1,5 @@
+# Example DSL file to generate a level
+
 block 30, 10, 2
 
 block 50,10, 2

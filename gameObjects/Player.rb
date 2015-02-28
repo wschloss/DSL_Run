@@ -1,5 +1,9 @@
 =begin
 Walter Schlosser
+
+The player object runs across the screen to the right.
+The player is affected by gravity, and must have a floor
+of blocks to avoid losing.
 =end
 
 class Player
