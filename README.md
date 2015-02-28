@@ -2,10 +2,10 @@
 
 ## A game where objects are defined by an internal DSL
 
-Walter Schlosser
+*Walter Schlosser*
 
-=========
-Requires 'Gosu' gem to run, run 'ruby Main.rb'
+*Requires 'Gosu' gem to run, run 'ruby Main.rb'*
+
 =========
 
 ## Inspiration
