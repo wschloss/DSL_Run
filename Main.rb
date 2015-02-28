@@ -10,12 +10,19 @@ file, and exits if there is an error.
 # Gosu gem
 require 'gosu'
 require './Game.rb'
+require './gameObjects/GameObject.rb'
 require './framework/Camera.rb'
 require './framework/AssetManager.rb'
 require './gameView/GameViewConstructor.rb'
 require './gameObjects/Tile.rb'
 # Singleton pattern module for the game window
 require 'singleton'
+
+# --- DSL Inclusion ---
+
+require "./framework/DSLdef.rb"
+
+# ---               ---
 
 # Main window
 class GameWindow < Gosu::Window
@@ -56,7 +63,7 @@ class GameWindow < Gosu::Window
 	    image.draw((xInWidths + 1) * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
 	    # Select objects on screen and draw them
       toDraw = @viewConstructor.clipOffScreen(@game.drawables, @cam.x, @cam.x + WINDOW_WIDTH)
-	    toDraw.each do |drawable|
+      toDraw.each do |drawable|
 	  	  @viewConstructor.drawClass(drawable, @assets)
 	    end
 	  end
@@ -71,17 +78,10 @@ class GameWindow < Gosu::Window
 end
 
 
-# --- DSL Inclusion ---
-
-# Required after the window definition so it may reference the class
-require "./framework/DSLdef.rb"
-
-# ---               ---
-
 
 # Attempt to load the level file and play
 # File can be passed as a command line arg
-filename = ARGV[0] || './resources/level.txt'
+filename = ARGV[0] || './resources/game_definition.rb'
 ARGV.clear
 if File.exist? filename
   begin

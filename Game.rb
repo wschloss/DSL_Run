@@ -5,11 +5,10 @@ The Game instance manages the objects in the game.  It responds to
 keyboard input, and updates the game logic while managing collisions.
 =end
 
-require './gameObjects/Player.rb'
 require './gameObjects/Block.rb'
 
 class Game
-  attr_reader :drawables
+  attr_reader :drawables, :lastDefined
   # Gravity for vertical acceleration
   @@GRAVITY = 5
   # Y value that represents the 'floor' of the map to avoid losing
@@ -20,17 +19,14 @@ class Game
   @@X_ACCELERATION = 1
 
   def initialize camera
+    # Defined game objects, hashes :name to class
+    @definitions = {}
+    # Keeps track of last defined object so functionality can be added
+    @lastDefined = nil
   	# Reference to camera to tell it where to focus
   	@cam = camera
   	# Contains all objects to draw
   	@drawables = []
-  	# Main player
-  	@player = Player.new(0,0) # position will be set based on first block
-  	# Player should be drawn
-  	@drawables << @player
-    # Start block and set floor, players y appropriately
-    #@drawables += generateTestBlocks(generateStartBlock)
-    @drawables << generateStartBlock
     # Floor is the lowest the player can go.  It corresponds to the top of the block
     # under the players position, and is updated in collisions
   end
@@ -52,7 +48,7 @@ class Game
   	  	@player.accelerate(@@X_ACCELERATION, 0)
   	  when :jumping
   	  	@player.accelerate(0, @@GRAVITY)
-        @player.state = :lose if @player.y >= @@LOSEFLOOR - Player::HEIGHT
+        @player.state = :lose if @player.y >= @@LOSEFLOOR - @player.height
   	end
     unless @player.state == :lose
       # Check collision with walls, update floor
@@ -69,7 +65,7 @@ class Game
     # Iterate over block first to find the one in question
     block = @drawables.select do |drawable|
       if drawable.instance_of? Block
-        leftBound = drawable.x - Player::WIDTH
+        leftBound = drawable.x - @player.width
         rightBound = drawable.x + drawable.width * Tile::WIDTH
         leftBound < @player.x && @player.x < rightBound
       else
@@ -84,30 +80,18 @@ class Game
       @player.state = :jumping
     else
       # Check if player is above the block to set a new floor
-      if block.y > @player.y + Player::HEIGHT
-        @floor = block.y - (block.height-1) * Tile::HEIGHT - 0.55 * Player::HEIGHT # .55 is a consequence of the player sprite containing empty space beneath it
-        #@floor = @@LOSEFLOOR if @floor > @@TESTFLOOR
+      if block.y > @player.y + @player.height
+        @floor = block.y - (block.height-1) * Tile::HEIGHT - 0.55 * @player.height # .55 is a consequence of the player sprite containing empty space beneath it
       else # collision on players right
         @player.vx = 0
       end
     end
   end
 
-  # A testing function that generates a variety of blocks
-  # with position to the right of the starting block
-  def generateTestBlocks(startingblock)
-    blocks = [startingblock]
-    100.times do
-      x = blocks[-1].x + blocks[-1].width * Tile::WIDTH + rand(800)
-      blocks << Block.new(x, @@LOSEFLOOR - 100, rand(100), 1 + rand(7))
-    end
-    blocks
-  end
-
   # Generates a start block and places the player/floor appropriately
   def generateStartBlock
     # Set player to stand on start block
-    @player.y = @@LOSEFLOOR - 100 - Tile::HEIGHT - 0.55 * Player::HEIGHT
+    @player.y = @@LOSEFLOOR - 100 - Tile::HEIGHT - 0.55 * @player.height
     # Set floor
     @floor = @player.y
     # Make the start block
@@ -118,5 +102,30 @@ class Game
   # all given in units of number of tiles
   def addBlock(x, width, height)
     @drawables << Block.new(x * Tile::WIDTH, @@LOSEFLOOR - 100, width, height)
+  end
+
+  # Adds a new game object class
+  def addObjectDef(name)
+    # Add new class if needed
+    unless @definitions.has_key? name.to_sym
+      @definitions[name.to_sym] = Class.new(GameObject)
+      # Override .class function to return the name this definition was given
+      @definitions[name.to_sym].class_eval("def class; #{name.capitalize.to_sym}; end")
+    end
+    # Update the last added class
+    @lastDefined = @definitions[name.to_sym]
+  end
+
+  # Adds instance of defined object to game
+  def addObject(name, x, y)
+    # Objects need a position
+    object = @definitions[name.to_sym].new(x,y)
+    # Keep reference if main player, and generate a starting block
+    if name.to_sym == :player
+      @player = object
+      @drawables << generateStartBlock
+    end
+    # Add this object to draw
+    @drawables << object
   end
 end

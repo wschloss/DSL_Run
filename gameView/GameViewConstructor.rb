@@ -20,7 +20,7 @@ class GameViewConstructor
   # returns list of drawables on screen
   def clipOffScreen(drawables, xmin, xmax)
   	drawables.select do |drawable|
-      if drawable.instance_of? Block
+      if drawable.is_a? CompositeGameObject
         leftBound = drawable.x
         rightBound = drawable.x + drawable.width * Tile::WIDTH
         xmax > leftBound && xmin < rightBound
