@@ -23,16 +23,16 @@ class AssetManager
   def load window
   	# Construct array of player images
   	playerAnim = *Gosu::Image.load_tiles(window, "./resources/playerSheet.png", 55, 76, false) 
-	  @imageHash[:player] = playerAnim
-	  @imageHash[:background] = Gosu::Image.new(window, @backgroundImage, true)
-    @imageHash[:tile] = Gosu::Image.new(window, @tileImage, true)
+	  @imageHash[:Player] = playerAnim
+	  @imageHash[:Background] = Gosu::Image.new(window, @backgroundImage, true)
+    @imageHash[:Tile] = Gosu::Image.new(window, @tileImage, true)
   end
 
   # Returns the image for the passed object symbol
   def lookup item
-  	if item == :player
+  	if item == :Player
       @animCount += 1
-  	  @imageHash[:player].at(@animCount/5 % 12)
+  	  @imageHash[:Player].at(@animCount/5 % 12)
   	else
   	  @imageHash[item]
   	end

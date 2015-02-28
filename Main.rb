@@ -12,6 +12,7 @@ require 'gosu'
 require './Game.rb'
 require './framework/Camera.rb'
 require './framework/AssetManager.rb'
+require './gameView/GameViewConstructor.rb'
 require './gameObjects/Tile.rb'
 # Singleton pattern module for the game window
 require 'singleton'
@@ -31,6 +32,8 @@ class GameWindow < Gosu::Window
     # Init camera and game
     @cam = Camera.new(0,0)
     @game = Game.new @cam
+    # Init a view constructor
+    @viewConstructor = GameViewConstructor.new
     # Load assets for drawing/sound
     @assets = AssetManager.new
     @assets.load self
@@ -48,27 +51,13 @@ class GameWindow < Gosu::Window
 	  translate -@cam.x, -@cam.y do
 	    # Draw two background tiles to fill the camera
 	    xInWidths = (@cam.x/WINDOW_WIDTH)
-	    image = @assets.lookup(:background)
+	    image = @assets.lookup(:Background)
   	  image.draw(xInWidths * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
 	    image.draw((xInWidths + 1) * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
-	    # Iterate over game objects to draw
-      # select only objects on screen
-      toDraw = @game.drawables.select do |drawable|
-        if drawable.instance_of? Block
-          leftBound = drawable.x
-          rightBound = drawable.x + drawable.width * Tile::WIDTH
-          shiftedCamX = @cam.x + WINDOW_WIDTH
-          shiftedCamX > leftBound && @cam.x < rightBound
-        else
-          drawable.x > @cam.x && drawable.x < @cam.x + WINDOW_WIDTH
-        end
-      end
+	    # Select objects on screen and draw them
+      toDraw = @viewConstructor.clipOffScreen(@game.drawables, @cam.x, @cam.x + WINDOW_WIDTH)
 	    toDraw.each do |drawable|
-	  	  if drawable.instance_of? Player
-          @assets.lookup(:player).draw(drawable.x, drawable.y, 0)
-	  	  elsif drawable.instance_of? Block
-          drawable.tiles.each { |tile| @assets.lookup(:tile).draw(tile.x, tile.y, 0) }
-	  	  end
+	  	  @viewConstructor.drawClass(drawable, @assets)
 	    end
 	  end
   end

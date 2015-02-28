@@ -6,8 +6,10 @@ The player is affected by gravity, and must have a floor
 of blocks to avoid losing.
 =end
 
-class Player
-  attr_accessor :x, :y, :vx, :vy, :state, :height, :width
+require "./gameObjects/GameObject.rb"
+
+class Player < GameObject
+  attr_accessor :vx, :vy, :state, :height, :width
 
   # Maximum allowed velocity components
   @@MAX_VX = 15
@@ -18,8 +20,7 @@ class Player
   HEIGHT = 76
 
   def initialize(x=0,y=0)
-    @x = x
-    @y = y
+    super(x,y)
     @vx = 0
     @vy = 0
     # Player states will include running and jumping, and lose
