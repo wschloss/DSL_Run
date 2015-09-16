@@ -8,23 +8,23 @@ so mapping between the object and the image is straightforward.
 class AssetManager
   def initialize
   	# Image count to be used to fill a loading bar in the future
-	  @imgCount = 14
-	  # Counter used for player animation frames
-	  @animCount = 0
+	@imgCount = 14
+	# Counter used for player animation frames
+	@animCount = 0
     # Image filenames
-	  @playerImages = "./resources/playerSheet.png"
-	  @backgroundImage = "./resources/background.png"
+	@playerImages = "./resources/playerSheet.png"
+	@backgroundImage = "./resources/background.png"
     @tileImage = "./resources/tile.png"
     # Hash of object symbol to loaded images
-	  @imageHash = {}
+	@imageHash = {}
   end
 
   # Loads images and stores in the hash for lookup later
   def load window
   	# Construct array of player images
   	playerAnim = *Gosu::Image.load_tiles(window, "./resources/playerSheet.png", 55, 76, false) 
-	  @imageHash[:Player] = playerAnim
-	  @imageHash[:Background] = Gosu::Image.new(window, @backgroundImage, true)
+	@imageHash[:Player] = playerAnim
+	@imageHash[:Background] = Gosu::Image.new(window, @backgroundImage, true)
     @imageHash[:Tile] = Gosu::Image.new(window, @tileImage, true)
   end
 
