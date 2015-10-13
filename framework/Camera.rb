@@ -16,6 +16,6 @@ class Camera
 
   # Moves camera's horizontal position to the desired object position minus an offset
   def follow object
-  	@x = object.x - @offset
+    @x = object.x - @offset
   end
 end

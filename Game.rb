@@ -23,40 +23,40 @@ class Game
     @definitions = {}
     # Keeps track of last defined object so functionality can be added
     @lastDefined = nil
-  	# Reference to camera to tell it where to focus
-  	@cam = camera
-  	# Contains all objects to draw
-  	@drawables = []
+    # Reference to camera to tell it where to focus
+    @cam = camera
+    # Contains all objects to draw
+    @drawables = []
     # Floor is the lowest the player can go.  It corresponds to the top of the block
     # under the players position, and is updated in collisions
   end
 
   # Responds to key presses appropriately
   def button_down id
-  	# Jump button is spacebar
-  	if id == Gosu::KbSpace && @player.state == :running
-  	  @player.vy -= @@JUMP_AMOUNT
-  	  @player.state = :jumping
-  	end
+    # Jump button is spacebar
+    if id == Gosu::KbSpace && @player.state == :running
+      @player.vy -= @@JUMP_AMOUNT
+      @player.state = :jumping
+    end
   end
 
   # Updates game logic
   def update
-  	# Accelerate player appropriately
-  	case @player.state
-  	  when :running
-  	  	@player.accelerate(@@X_ACCELERATION, 0)
-  	  when :jumping
-  	  	@player.accelerate(0, @@GRAVITY)
+    # Accelerate player appropriately
+    case @player.state
+      when :running
+        @player.accelerate(@@X_ACCELERATION, 0)
+      when :jumping
+        @player.accelerate(0, @@GRAVITY)
         @player.state = :lose if @player.y >= @@LOSEFLOOR - @player.height
-  	end
+    end
     unless @player.state == :lose
       # Check collision with walls, update floor
       collisionCheck
-  	  # Move player
-  	  @player.move @floor
-  	  # Move camera to player
-  	  @cam.follow @player
+      # Move player
+      @player.move @floor
+      # Move camera to player
+      @cam.follow @player
     end
   end
 

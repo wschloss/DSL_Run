@@ -48,32 +48,32 @@ class GameWindow < Gosu::Window
 
   # Called every frame to update logic
   def update
-  	# Move game logic forward
-  	@game.update
+    # Move game logic forward
+    @game.update
   end
 
   # Called when needed, draws all game objects
   def draw
-  	# Draw all the game objects with the camera translation
-	  translate -@cam.x, -@cam.y do
-	    # Draw two background tiles to fill the camera
-	    xInWidths = (@cam.x/WINDOW_WIDTH)
-	    image = @assets.lookup(:Background)
+    # Draw all the game objects with the camera translation
+    translate -@cam.x, -@cam.y do
+      # Draw two background tiles to fill the camera
+      xInWidths = (@cam.x/WINDOW_WIDTH)
+      image = @assets.lookup(:Background)
       image.draw(xInWidths * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
-	    image.draw((xInWidths + 1) * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
-	    # Select objects on screen and draw them
+      image.draw((xInWidths + 1) * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
+      # Select objects on screen and draw them
       toDraw = @viewConstructor.clipOffScreen(@game.drawables, @cam.x, @cam.x + WINDOW_WIDTH)
       toDraw.each do |drawable|
         @viewConstructor.drawClass(drawable, @assets)
-	    end
-	  end
+      end
+    end
   end
 
   # Triggers on keyboard down events
   def button_down id
-  	# Let game handle input logic
-  	close if id == Gosu::KbEscape
-  	@game.button_down id
+    # Let game handle input logic
+    close if id == Gosu::KbEscape
+    @game.button_down id
   end
 end
 

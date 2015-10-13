@@ -17,15 +17,15 @@ module Runs
   # Changes velocity according to the passed acceleration
   # Also imposes maximum velocities
   def accelerate(ax, ay)
-  	@vx += ax unless @vx > @@MAX_VX
-  	@vy += ay unless @vy > @@MAX_VY
+    @vx += ax unless @vx > @@MAX_VX
+    @vy += ay unless @vy > @@MAX_VY
   end
 
   # Add vars needed for running functionality
   def assignRunsVars
-  	@vx = 0
-  	@vy = 0
-  	@state = :running
+    @vx = 0
+    @vy = 0
+    @state = :running
   end
 
   # Update initialization of this object to include run vars
@@ -36,11 +36,11 @@ module Runs
 
     # Redefine initialize, still takes x,y args
     define_method(:initialize) do |x,y|
-    # Call old init function by binding it to the object that includes this module
-    append_to.bind(self).(x,y)
-    # Additional init code needed
-    assignRunsVars
-	end
+      # Call old init function by binding it to the object that includes this module
+      append_to.bind(self).(x,y)
+      # Additional init code needed
+      assignRunsVars
+    end
   end
 
 end
@@ -52,11 +52,11 @@ module Player
   HEIGHT = 76
 
   def width
-  	WIDTH
+    WIDTH
   end
 
   def height
-  	HEIGHT
+    HEIGHT
   end
 
    # Update the player position, floor is the lowest allowable y
