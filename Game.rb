@@ -81,7 +81,8 @@ class Game
     else
       # Check if player is above the block to set a new floor
       if block.y > @player.y + @player.height
-        @floor = block.y - (block.height-1) * Tile::HEIGHT - 0.55 * @player.height # .55 is a consequence of the player sprite containing empty space beneath it
+        # .55 is a consequence of the player sprite containing empty space beneath it
+        @floor = block.y - (block.height-1) * Tile::HEIGHT - 0.55 * @player.height 
       else # collision on players right
         @player.vx = 0
       end

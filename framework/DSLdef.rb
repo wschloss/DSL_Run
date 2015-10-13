@@ -31,15 +31,15 @@ module Runs
   # Update initialization of this object to include run vars
   # This patches the initialize function when the module is include
   def self.included(base)
-  	# Make unbound method equal to the old initialize method
-	append_to = base.instance_method(:initialize)
+    # Make unbound method equal to the old initialize method
+    append_to = base.instance_method(:initialize)
 
-	# Redefine initialize, still takes x,y args
-	define_method(:initialize) do |x,y|
-	  # Call old init function by binding it to the object that includes this module
-	  append_to.bind(self).(x,y)
-	  # Additional init code needed
-	  assignRunsVars
+    # Redefine initialize, still takes x,y args
+    define_method(:initialize) do |x,y|
+    # Call old init function by binding it to the object that includes this module
+    append_to.bind(self).(x,y)
+    # Additional init code needed
+    assignRunsVars
 	end
   end
 

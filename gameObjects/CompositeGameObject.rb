@@ -11,11 +11,11 @@ class CompositeGameObject
   attr_reader :pieces, :x, :y, :width, :height
 
   def initialize(x=0, y=0, width=1, height=1)
-	# Init position
-  	@x = x
-  	@y = y
-  	# Width and height of a block are in number of tiles
-  	@width = width
-  	@height = height
+    # Init position
+    @x = x
+    @y = y
+    # Width and height of a block are in number of tiles
+    @width = width
+    @height = height
   end
 end

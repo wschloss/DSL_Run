@@ -59,12 +59,12 @@ class GameWindow < Gosu::Window
 	    # Draw two background tiles to fill the camera
 	    xInWidths = (@cam.x/WINDOW_WIDTH)
 	    image = @assets.lookup(:Background)
-  	    image.draw(xInWidths * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
+      image.draw(xInWidths * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
 	    image.draw((xInWidths + 1) * WINDOW_WIDTH, 0, 0, WINDOW_WIDTH.to_f/image.width, WINDOW_HEIGHT.to_f/image.height)
 	    # Select objects on screen and draw them
-        toDraw = @viewConstructor.clipOffScreen(@game.drawables, @cam.x, @cam.x + WINDOW_WIDTH)
-        toDraw.each do |drawable|
-	  	  @viewConstructor.drawClass(drawable, @assets)
+      toDraw = @viewConstructor.clipOffScreen(@game.drawables, @cam.x, @cam.x + WINDOW_WIDTH)
+      toDraw.each do |drawable|
+        @viewConstructor.drawClass(drawable, @assets)
 	    end
 	  end
   end
